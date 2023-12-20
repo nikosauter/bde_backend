@@ -1,0 +1,15 @@
+apiVersion: skaffold/v2beta29
+kind: Config
+
+metadata:
+  name: big-data-engineering
+
+build:
+  artifacts:
+    - image: bde/publisher
+      context: publisher
+
+deploy:
+  kubectl:
+    manifests:
+      - k8s/*.yaml
