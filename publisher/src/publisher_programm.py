@@ -39,7 +39,8 @@ for row in data:
     #send json to kafka (no key specified -> use round robin for paritions which is fine as each post can stand for itself and the order is not really relevant)
     producer.produce(topic="posts", value=json_object.encode('utf-8'))
 
-    producer.flush()
+    #When a Kafka producer sends a message to a topic, it is not immediately guaranteed that the message has been successfully written to the Kafka broker. The flush() method helps in making this guarantee.
+    producer.flush() 
 
     time.sleep(.5)
 
