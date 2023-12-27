@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mariadb-deployment-init-configmap
+data:
+  mariadb-init.sql: |
+    SET GLOBAL sql_mode = 'ANSI_QUOTES';
+    CREATE TABLE `hashtags` (
+      `counter` BIGINT,
+      `hashtag`  VARCHAR(280) NOT NULL,
+      PRIMARY KEY (`hashtag`)
+    );
