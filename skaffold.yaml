@@ -8,6 +8,8 @@ build:
   artifacts:
     - image: bde/publisher
       context: publisher
+    - image: bde/spark-app
+      context: spark-app
 
 deploy:
   kubectl:
