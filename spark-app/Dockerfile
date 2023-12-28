@@ -7,7 +7,7 @@ ENV SPARK_VERSION "3.5.0"
 ENV IVY_PACKAGE_DIR "/tmp/.ivy"
 ENV EXTRA_JAR_PATH "/opt/bitnami/spark/jars"
 
-ENV IVY_CMD "java -Divy.default.ivy.user.dir=/tmp/.ivy-home -jar ${EXTRA_JAR_PATH}/ivy-*.jar -verbose -cache ${IVY_PACKAGE_DIR} -retrieve ${EXTRA_JAR_PATH}/[artifact]-[revision](-[classifier]).[ext]"
+ENV IVY_CMD "java -Divy.default.ivy.user.dir=/tmp/.ivy-home -jar ${EXTRA_JAR_PATH}/ivy-*.jar -cache ${IVY_PACKAGE_DIR} -retrieve ${EXTRA_JAR_PATH}/[artifact]-[revision](-[classifier]).[ext]"
 
 # Dependencies for Spark Kafka
 RUN echo Using ivy command: ${IVY_CMD}

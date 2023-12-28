@@ -5,8 +5,9 @@ metadata:
 data:
   mariadb-init.sql: |
     SET GLOBAL sql_mode = 'ANSI_QUOTES';
-    CREATE TABLE `hashtags` (
+    CREATE TABLE `trending_hashtags` (
+      `post_window_end` DATETIME NOT NULL,  
       `counter` BIGINT,
       `hashtag`  VARCHAR(280) NOT NULL,
-      PRIMARY KEY (`hashtag`)
+      PRIMARY KEY (`post_window_end`, `hashtag`)
     );
