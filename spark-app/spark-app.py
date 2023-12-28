@@ -27,29 +27,29 @@ postStream = spark \
     .option("startingOffsets", "earliest") \
     .load()
 
-posts = postStream.select(
-    from_json(
-        column("value").cast("string"),
-        postSchema
-    ).alias("json")
-).select(
-    column("json.*")
-)
+# posts = postStream.select(
+#     from_json(
+#         column("value").cast("string"),
+#         postSchema
+#     ).alias("json")
+# ).select(
+#     column("json.*")
+# )
+#
+# df = posts \
+#     .withColumn("unix_timestamp", unix_timestamp("timestamp", timestamp_format)) \
+#     .withColumn("parsed_timestamp", from_unixtime("unix_timestamp")) \
+#     .withColumn("subtracted_timestamp", expr("parsed_timestamp - INTERVAL 9 HOURS")) \
+#     .withColumn("hashtags", regexp_extract_all('text', lit(r'(#\w+)'))) \
+#     .drop("text") \
+#     .select(col("parsed_timestamp"), explode(col("hashtags")).alias("hashtag"))
+#
+# trendingTopics = df.groupBy(
+#     window(col("parsed_timestamp"), "1 minute", "1 minute"),
+#     col("hashtag")
+# ).count()
 
-df = posts \
-    .withColumn("unix_timestamp", unix_timestamp("timestamp", timestamp_format)) \
-    .withColumn("parsed_timestamp", from_unixtime("unix_timestamp")) \
-    .withColumn("subtracted_timestamp", expr("parsed_timestamp - INTERVAL 9 HOURS")) \
-    .withColumn("hashtags", regexp_extract_all('text', lit(r'(#\w+)'))) \
-    .drop("text") \
-    .select(col("parsed_timestamp"), explode(col("hashtags")).alias("hashtag"))
-
-trendingTopics = df.groupBy(
-    window(col("parsed_timestamp"), "1 minute", "1 minute"),
-    col("hashtag")
-).count()
-
-consoleDump = trendingTopics \
+consoleDump = postStream \
     .writeStream \
     .outputMode("update") \
     .format("console") \
