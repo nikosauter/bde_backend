@@ -3,7 +3,7 @@ import re
 from pyspark.sql import SparkSession
 from pyspark.sql.types import LongType, StructField, StructType, StringType, ArrayType
 from pyspark.sql.functions import (
-    column, from_json, expr, from_unixtime, unix_timestamp, regexp_extract_all,
+    column, from_json, expr, from_unixtime, unix_timestamp,
     explode, window, col, lit, to_timestamp, udf
 )
 
@@ -62,7 +62,7 @@ stream_data = stream_data.select(col("id"), col("timestamp"), col("username"), e
 
 stream_data = stream_data.withWatermark("timestamp", "1 hour") \
     .groupBy(
-        window(col("timestamp"), "3 hours", "3 hours"),
+        window(col("timestamp"), "24 hours", "3 hours"),
         col("hashtag")
     ) \
     .count()

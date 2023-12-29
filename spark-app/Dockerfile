@@ -1,6 +1,6 @@
-FROM bitnami/spark:3.5.0
+FROM bitnami/spark:3.3.0
 
-ENV SPARK_VERSION "3.5.0"
+ENV SPARK_VERSION "3.3.0"
 
 # Download Java dependencies (Kafka, MariaDB) using Ivy (cf. https://stackoverflow.com/a/15456621) 
 
