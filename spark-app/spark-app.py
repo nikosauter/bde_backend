@@ -10,7 +10,8 @@ from pyspark.sql.functions import (
 def save_to_database(batch_dataframe, batch_id):
     global db_url, db_schema, db_options
     print(f"Writing batchID {batch_id} to database @ {db_url}")
-    batch_dataframe.distinct().write.jdbc(db_url, db_schema, "append", db_options)
+    # problem when overwriting: While the table is to be overwritten, it is empty
+    batch_dataframe.distinct().write.jdbc(db_url, db_schema, "overwrite", db_options)
 
 db_url = 'jdbc:mysql://my-app-mariadb-service:3306/user_posts'
 db_options = {"user": "root", "password": "mysecretpw"}
@@ -74,6 +75,8 @@ stream_data = stream_data \
     .drop("window")
 
 query = stream_data \
+    .select(column("window_start"), column("window_end"), column("hashtag"), column("counter")) \
+    .orderBy(col("window_end").desc()) \
     .writeStream \
     .outputMode("complete") \
     .option("numRows", 40) \
