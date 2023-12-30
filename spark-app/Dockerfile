@@ -34,6 +34,8 @@ RUN groupadd --gid 1001 spark
 RUN useradd --uid 1001 --gid spark --shell /bin/bash spark
 # End: Workaround
 
+RUN pip install sqlalchemy PyMySQL
+
 RUN apt-get update && apt-get install -y zip
 RUN chown spark:spark /app/
 
