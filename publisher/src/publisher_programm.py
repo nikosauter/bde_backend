@@ -44,3 +44,7 @@ for row in data:
 
     time.sleep(.5)
 
+while True:
+    print("Pod is still running...")
+    time.sleep(10)
+
