@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: backend
+    spec:
+      securityContext:
+        runAsUser: 1000
+      containers:
+        - name: backend
+          image: bde/backend
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP

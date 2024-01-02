@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trending Topics</title>
+    <script>
+      function createPost() {
+        const content = document.getElementById("content").value;
+
+        fetch("/post", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ content: content }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data.message);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    </script>
+</head>
+<body>
+    <h1>Trending Topics</h1>
+    <ul id="trending-list"></ul>
+
+    <script>
+        const results = {{ results|safe }};
+
+        const trendingList = document.getElementById("trending-list");
+        results.forEach(topic => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${topic.hashtag}, Counter: ${topic.counter}`;
+            trendingList.appendChild(listItem);
+        });
+    </script>
+</body>
+</html>
