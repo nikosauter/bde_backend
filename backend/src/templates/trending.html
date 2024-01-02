@@ -11,7 +11,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ content: content }),
+          body: JSON.stringify({ post_content: content }),
         })
           .then((response) => response.json())
           .then((data) => {
@@ -25,17 +25,25 @@
 </head>
 <body>
     <h1>Trending Topics</h1>
+    <label for="trending-list" id="trending-list-label"></label>
     <ul id="trending-list"></ul>
-
     <script>
         const results = {{ results|safe }};
 
-        const trendingList = document.getElementById("trending-list");
-        results.forEach(topic => {
-            const listItem = document.createElement("li");
-            listItem.textContent = `${topic.hashtag}, Counter: ${topic.counter}`;
-            trendingList.appendChild(listItem);
-        });
+        if (results.length === 0) {
+            const trendingList = document.getElementById("trending-list-label");
+            trendingList.textContent = "No trending topics yet"
+        } else {
+            const trendingList = document.getElementById("trending-list");
+            results.forEach(topic => {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${topic.hashtag}, Counter: ${topic.counter}`;
+                trendingList.appendChild(listItem);
+            });
+        }
     </script>
+    <label for="content">Send post</label>
+    <input type="text" id="content" placeholder="Enter content" />
+    <button onclick="createPost()">Post</button>
 </body>
 </html>
