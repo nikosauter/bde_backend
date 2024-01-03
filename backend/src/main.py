@@ -8,7 +8,7 @@ import time
 import pytz
 from datetime import datetime
 from confluent_kafka import Producer
-from fastapi import Depends, FastAPI, Header, Request, Body
+from fastapi import Depends, FastAPI, Header, Request, Body, Query
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.templating import Jinja2Templates
@@ -27,12 +27,29 @@ app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 @app.get("/trending")
-async def get_trending_topics(request: Request):
-    trending_hashtags = fetch_trending_hashtags()
+async def get_trending_topics(request: Request, selected_date: str = Query(default=None)):
+    if selected_date:
+        print("yes")
+        return fetch_trending_hashtags(date=datetime.strptime(selected_date, "%Y-%m-%d").date())
+    else:
+        print("no")
+        trending_hashtags = fetch_trending_hashtags()
+    return templates.TemplateResponse("trending.html", {"request": request, "results": trending_hashtags})
+
+@app.get("/discover_trending")
+async def get_trending_topics_from_day(selected_date: str = Query(default=None)):
+    if selected_date:
+        print("yes")
+        return fetch_trending_hashtags(date=datetime.strptime(selected_date, "%Y-%m-%d").date())
+    else:
+        print("no")
+        trending_hashtags = fetch_trending_hashtags()
     return templates.TemplateResponse("trending.html", {"request": request, "results": trending_hashtags})
 
 @app.post("/post")
 def send_post(post_content: str = Body(..., embed=True)):
+    if post_content == "":
+        return
     json_object = {
         "id": str(uuid.uuid4()),
         "timestamp": current_datetime(),
@@ -50,7 +67,7 @@ class CustomJSONEncoder(json.JSONEncoder):
             return obj.strftime("%Y-%m-%d %H:%M:%S")
         return super().default(obj)
 
-def fetch_trending_hashtags():
+def fetch_trending_hashtags(date = None):
     try:
         conn = mariadb.connect(
             user="root",
@@ -61,7 +78,19 @@ def fetch_trending_hashtags():
         )
 
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM trending_hashtags ORDER BY window_end DESC, counter DESC LIMIT 5")
+        if date is not None:
+            print(date)
+            query = """
+                        SELECT * FROM trending_hashtags
+                        WHERE window_end <= %s + INTERVAL 1 DAY AND window_end >= %s - INTERVAL 3 DAY
+                        ORDER BY window_end DESC, counter DESC LIMIT 5
+                    """
+            cursor.execute(query, (date,date))
+        else:
+            cursor.execute("SELECT * FROM trending_hashtags "
+                    "WHERE window_end >= CURDATE() - INTERVAL 3 DAY "
+                    "ORDER BY window_end DESC, counter DESC LIMIT 5")
+
         rows = cursor.fetchall()
         columns = [column[0] for column in cursor.description]
 
@@ -72,7 +101,7 @@ def fetch_trending_hashtags():
 
         cursor.close()
         conn.close()
-
+        print(jsonable_encoder(results))
         return jsonable_encoder(results)
 
     except mariadb.Error as e:
