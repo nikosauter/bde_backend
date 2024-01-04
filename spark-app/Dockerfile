@@ -37,6 +37,7 @@ RUN useradd --uid 1001 --gid spark --shell /bin/bash spark
 RUN pip install sqlalchemy PyMySQL
 
 RUN apt-get update && apt-get install -y zip
+RUN apt-get install wget -y
 RUN chown spark:spark /app/
 
 USER spark

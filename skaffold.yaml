@@ -10,6 +10,8 @@ build:
       context: publisher
     - image: bde/spark-app
       context: spark-app
+    - image: bde/backend
+      context: backend
 
 deploy:
   kubectl:
