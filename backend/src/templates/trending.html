@@ -2,86 +2,26 @@
 <html>
 <head>
     <title>Trending Topics</title>
-    <script>
-      function createPost() {
-        const content = document.getElementById("content").value;
-        fetch("/post", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ post_content: content }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data.message);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
-      }
-
-      function selectDate() {
-        const content = document.getElementById("selected_date").value;
-        const params = { selected_date: content };
-        const urlParams = new URLSearchParams(params);
-        const url = '/discover_trending?' + urlParams.toString();
-        fetch(url)
-          .then(response => response.json())
-          .then(data => {
-            console.log(data);
-              const trendingList = document.getElementById("trending-list-of-date");
-              while (trendingList.firstChild) {
-                trendingList.removeChild(trendingList.firstChild);
-              }
-              if (data.length === 0) {
-                const trendingList = document.getElementById("trending-list-of-date-label");
-                trendingList.textContent = "No trending topics on this day"
-              } else {
-                  trendingList.textContent = ""
-                  data.forEach(topic => {
-                      const listItem = document.createElement("li");
-                      listItem.textContent = `${topic.hashtag}, Counter: ${topic.counter}`;
-                      trendingList.appendChild(listItem);
-                  });
-              }
-          })
-          .catch(error => {
-            console.error("Error:", error);
-          });
-      }
-    </script>
 </head>
 <body>
     <h1>Trending Topics of the last 3 days</h1>
-    <label for="trending-list" id="trending-list-label"></label>
+    <p id="trending-list-label"></p>
     <ul id="trending-list"></ul>
-    <script>
-        const results = {{ results|safe }};
 
-        if (results.length === 0) {
-            const trendingList = document.getElementById("trending-list-label");
-            trendingList.textContent = "No trending topics yet"
-        } else {
-            const trendingList = document.getElementById("trending-list");
-            results.forEach(topic => {
-                const listItem = document.createElement("li");
-                listItem.textContent = `${topic.hashtag}, Counter: ${topic.counter}`;
-                trendingList.appendChild(listItem);
-            });
-        }
-    </script>
-    <h1>Send post</h1>
-    <label for="content">Send post</label>
+    <h1>Send Post</h1>
     <input type="text" id="content" placeholder="Enter content" />
     <button onclick="createPost()">Post</button>
 
     <h1>Discover what the trending topics were on a particular day</h1>
     <label for="content">Select date (e.g. 2009-04-07)</label>
-    <label for="selected_date">
-    </label><input type="text" id="selected_date" placeholder="Select date" />
+    <input type="text" id="selected_date" placeholder="Select date" />
     <button onclick="selectDate()">Select</button>
-    <label for="trending-list-of-date" id="trending-list-of-date-label"></label>
+    <p id="trending-list-of-date-label"></p>
     <ul id="trending-list-of-date"></ul>
+
+    <script>
+        window.results = {{ results|safe }};
+    </script>
+    <script src="{{ url_for('templates', path='main.js') }}"></script>
 </body>
 </html>

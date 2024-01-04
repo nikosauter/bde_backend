@@ -12,6 +12,8 @@ from fastapi import Depends, FastAPI, Header, Request, Body, Query
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
+
 
 producer_conf = {
     'bootstrap.servers': 'kafka-cluster:9092',
@@ -25,6 +27,7 @@ keys = ["id", "timestamp", "username", "text"]
 app = FastAPI()
 
 templates = Jinja2Templates(directory="templates")
+app.mount("/templates", StaticFiles(directory="templates"), name="templates")
 
 @app.get("/trending")
 async def get_trending_topics(request: Request, selected_date: str = Query(default=None)):
