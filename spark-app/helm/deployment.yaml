@@ -15,3 +15,9 @@ spec:
       containers:
         - name: spark-app
           image: bde/spark-app
+          env:
+            - name: MARIADB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-secret
+                  key: root-password

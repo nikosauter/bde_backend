@@ -16,4 +16,8 @@ build:
 deploy:
   kubectl:
     manifests:
-      - k8s/*.yaml
+      - backend/helm/*.yaml
+      - database/helm/*.yaml
+      - kafka/helm/*.yaml
+      - publisher/helm/*.yaml
+      - spark-app/helm/*.yaml

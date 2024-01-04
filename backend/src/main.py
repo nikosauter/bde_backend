@@ -6,6 +6,7 @@ import sys
 import uuid
 import time
 import pytz
+import os
 from datetime import datetime
 from confluent_kafka import Producer
 from fastapi import Depends, FastAPI, Header, Request, Body, Query
@@ -87,7 +88,7 @@ def connect_to_db():
     try:
         conn = mariadb.connect(
             user="root",
-            password="mysecretpw",
+            password=os.getenv("MARIADB_ROOT_PASSWORD", ""),
             host="my-app-mariadb-service",
             port=3306,
             database="user_posts"
