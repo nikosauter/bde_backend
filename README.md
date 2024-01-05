@@ -8,8 +8,8 @@ https://www.kaggle.com/datasets/kazanova/sentiment140/data
 ## 1.2 Laborarbeit
 
 Die Laborarbeit inklusive auch dieses Word-Dokuments noch einmal finden Sie in unserem öffentlichen Git-Repository unter:
-nikosauter/bde_backend: Big Data Engineering Backend Lab Work (github.com)
-Das gesamte System wird mit Hilfe von Skaffold entwickelt. Um alle Komponenten zu starten ist deshalb nur ein Skaffold-Befehl nötig. Die Skaffold-Yaml ist im Oberverzeichnis zu finden. Darunter ist ein Order „k8s“, in dem sich die Yaml-Dateien für die Kubernetes-Pods befinden. Ergänzend zu manchen Pods sind Dockerfiles, Programme und Dateien in entsprechend weiteren Ordnern zu finden.
+https://github.com/nikosauter/bde_backend
+Das gesamte System wird mit Hilfe von Skaffold entwickelt. Um alle Komponenten zu starten ist deshalb nur ein Skaffold-Befehl nötig. Die Skaffold-Yaml ist im Oberverzeichnis zu finden. Enthalten sind hier ebenfalls mehrere Ordner für je eine Komponente der Architektur. Darin befinden sich die Yaml-Dateien für die Kubernetes-Pods. Ergänzend anzutreffen sind hier zu manchen Pods Dockerfiles, Programme und Dateien.
 Zum Ausführen sind folgende Befehle nötig:
 
 Vorbedingungen:
@@ -34,7 +34,7 @@ Dieses Kapitel beginnt mit einer Beschreibung der Architektur. Die Unterkapitel 
 
 ## 2.1 Generation
 
-In unserem Beispiel wird die Datengenerierung simuliert. Ein Python-Programm schreibt vorgegebene Posts aus einer Textdatei nach kleiner Umwandlung in einem JSON-Format periodisch in den Ingestion Layer. Dieses Programm und die Beispieldaten befinden sich in einem eigenen Docker-Container. Die Dateien hierfür sind im Ordner „publisher“ und die Yaml im k8s-Ordner unter dem gleichen Namen zu finden. Bei den Beispieldaten wird der anfangs erwähnte Beispieldatensatz verwendet. Wir haben jedoch für eine bessere Beispielauswertung Posts herausgefiltert, welche keine Hashtags beinhalten.
+In unserem Beispiel wird die Datengenerierung simuliert. Ein Python-Programm schreibt vorgegebene Posts aus einer Textdatei nach kleiner Umwandlung in einem JSON-Format periodisch in den Ingestion Layer. Dieses Programm und die Beispieldaten befinden sich in einem eigenen Docker-Container. Die Dateien hierfür sind im Ordner „publisher“ zu sehen. Bei den Beispieldaten wird der anfangs erwähnte Beispieldatensatz verwendet. Wir haben jedoch für eine bessere Beispielauswertung Posts herausgefiltert, welche keine Hashtags beinhalten.
 Das simulierte Quellsystem pusht die Daten zu Big Data Analyse Systemen. Dieses Vorgehen ist besonders geeignet für Real-Time-Anforderungen, wie es unser Use Case verlangt.
 Die Daten in Kafka, die Logs zu den Posts, haben folgendes JSON-Format (In den Klammern steht der JSON-Key):
 | ID (id) | Datum (timestamp) | User (username) | Post-Text (text) |
