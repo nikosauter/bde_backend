@@ -16,4 +16,8 @@ build:
 deploy:
   kubectl:
     manifests:
-      - k8s/*.yaml
+      - backend/k8s/*.yaml
+      - database/k8s/*.yaml
+      - kafka/k8s/*.yaml
+      - publisher/k8s/*.yaml
+      - spark-app/k8s/*.yaml

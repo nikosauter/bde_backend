@@ -1,5 +1,5 @@
 import re
-
+import os
 from sqlalchemy import create_engine, text
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.types import LongType, StructField, StructType, StringType, ArrayType
@@ -15,7 +15,7 @@ db_service = "my-app-mariadb-service:3306"
 db_url = f"jdbc:mysql://{db_service}/user_posts"
 db_name = "user_posts"
 db_user = "root"
-db_password = "mysecretpw"
+db_password = os.getenv("MARIADB_ROOT_PASSWORD", "")
 db_schema = 'trending_hashtags'
 
 spark = SparkSession.builder \
